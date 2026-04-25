@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Vector Analyzer for Game/Graphics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent-primary: #38bdf8;
+            --accent-secondary: #818cf8;
+            --accent-success: #10b981;
+            --accent-error: #ef4444;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --highlight: #fbbf24;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--accent-primary);
+        }
+
+        .section-title {
+            color: var(--accent-secondary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 8px;
+            color: var(--text-dim);
+        }
+
+        li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-dim);
+        }
+
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+        }
+
+        .output-panel {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px dashed var(--glass-border);
+        }
+
+        .result-item {
+            margin-bottom: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        .result-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .result-value {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .algorithm-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .math-sym {
+            color: var(--accent-secondary);
+        }
+
+        .visualizer-container {
+            width: 100%;
+            height: 350px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+            border: 1px solid var(--accent-success);
+        }
+
+        .badge-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-error);
+            border: 1px solid var(--accent-error);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Micro-animations */
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-primary);
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <div class="status-badge">Enhanced Pro Tool</div>
+            <h1 class="main-title">3. Vector Analyzer for Game/Graphics</h1>
+        </header>
+
+        <div class="grid">
+            <!-- Left Column: Info & Requirements -->
+            <div class="info-section">
+                <div class="card">
+                    <h2 title="Concept">🎯 แนวคิด</h2>
+                    <p style="margin-bottom: 15px; color: var(--text-dim);">
+                        เครื่องมือวิเคราะห์เวกเตอร์สำหรับงานเกม/กราฟิก</p>
+
+                    <div class="section-title">🧠 เนื้อหา</div>
+                    <ul>
+                        <li>เวกเตอร์ 2D/3D</li>
+                        <li>ขนาดเวกเตอร์ (Magnitude)</li>
+                        <li>Dot / Cross product</li>
+                        <li>Unit vector (Normalization)</li>
+                        <li>ตรวจขนาน และมุมระหว่างเวกเตอร์</li>
+                    </ul>
+
+                    <div class="section-title">🛠️ Requirement โปรแกรมต้อง:</div>
+                    <ul>
+                        <li>รับเวกเตอร์ 2 ตัว</li>
+                        <li>คำนวณ Magnitude, Unit Vector</li>
+                        <li>คำนวณ Dot / Cross Product</li>
+                        <li>คำนวณมุมระหว่างเวกเตอร์</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="border-left: 4px solid var(--highlight);">
+                    <h2 style="color: var(--highlight);">⭐ Challenge</h2>
+                    <ul>
+                        <li>แสดงกราฟเวกเตอร์ (Interactive Canvas)</li>
+                        <li>ใช้ใน Simulation การเคลื่อนที่</li>
+                        <li>ตรวจว่าเวกเตอร์ตั้งฉากหรือไม่</li>
+                    </ul>
+                    <div class="algorithm-box">
+                        <div>• Perpendicular IF <span class="math-sym">A · B = 0</span></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>💡 Algorithm</h2>
+                    <div class="algorithm-box">
+                        <div>• magnitude = <span class="math-sym">sqrt(x² + y² + z²)</span></div>
+                        <div style="margin-top: 8px;">• dot = <span class="math-sym">Σ ai * bi</span></div>
+                        <div style="margin-top: 8px;">• cross = <span class="math-sym">determinant 3x3</span></div>
+                        <div style="margin-top: 8px;">• angle = <span class="math-sym">cos⁻¹(dot / (|A| * |B|))</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Interactive Tool -->
+            <div class="tool-section">
+                <div class="card">
+                    <h2>📥 Input</h2>
+                    <div class="input-group">
+                        <label for="vecA">Vector A (x, y, z) <span
+                                style="color:var(--accent-primary); font-weight:bold;">— Blue</span></label>
+                        <input type="text" id="vecA" value="1, 2, 3" placeholder="e.g. 1, 2, 3">
+                    </div>
+                    <div class="input-group">
+                        <label for="vecB">Vector B (x, y, z) <span
+                                style="color:var(--accent-secondary); font-weight:bold;">— Purple</span></label>
+                        <input type="text" id="vecB" value="4, 5, 6" placeholder="e.g. 4, 5, 6">
+                    </div>
+
+                    <div class="visualizer-container">
+                        <canvas id="vectorCanvas"></canvas>
+                        <div
+                            style="position: absolute; bottom: 10px; right: 10px; font-size: 0.7rem; color: var(--text-dim);">
+                            *3D Isometric View (Projected)
+                        </div>
+                    </div>
+
+                    <button class="btn" id="btnSimulate">
+                        <span>▶️ Run Movement Simulation</span>
+                    </button>
+
+                    <h2 style="margin-top: 40px;">📤 Output</h2>
+                    <div class="output-panel">
+                        <div class="result-item">
+                            <span class="result-label">|A| (Magnitude)</span>
+                            <span class="result-value" id="outMagA">0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">|B| (Magnitude)</span>
+                            <span class="result-value" id="outMagB">0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Dot Product</span>
+                            <span class="result-value" id="outDot">0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Cross Product</span>
+                            <span class="result-value" id="outCross">(0, 0, 0)</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Angle (Degrees)</span>
+                            <span class="result-value" id="outAngle">0.00°</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Perpendicular?</span>
+                            <span id="outPerp" class="badge badge-error">NO</span>
+                        </div>
+                        <div class="result-item" style="border: none;">
+                            <span class="result-label">Unit Vector A</span>
+                            <span class="result-value" id="outUnitA">(0, 0, 0)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputA = document.getElementById('vecA');
+        const inputB = document.getElementById('vecB');
+        const btnSimulate = document.getElementById('btnSimulate');
+
+        const outMagA = document.getElementById('outMagA');
+        const outMagB = document.getElementById('outMagB');
+        const outDot = document.getElementById('outDot');
+        const outCross = document.getElementById('outCross');
+        const outAngle = document.getElementById('outAngle');
+        const outPerp = document.getElementById('outPerp');
+        const outUnitA = document.getElementById('outUnitA');
+
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let simProgress = 0;
+        let isSimulating = false;
+        let currentA = [1, 2, 3];
+        let currentB = [4, 5, 6];
+
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            draw();
+        }
+
+        function parseVector(str) {
+            return str.split(',').map(v => parseFloat(v.trim()) || 0);
+        }
+
+        // Isometric-like 3D to 2D projection
+        function project(x, y, z) {
+            const scale = 30;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2 + 50;
+
+            // Simple projection: Y axis is up, X/Z are angled
+            const px = centerX + (x - z * 0.5) * scale;
+            const py = centerY - (y + z * 0.5) * scale;
+
+            return { x: px, y: py };
+        }
+
+        function drawArrow(from, to, color, width = 3) {
+            const headlen = 10;
+            const dx = to.x - from.x;
+            const dy = to.y - from.y;
+            const angle = Math.atan2(dy, dx);
+
+            ctx.beginPath();
+            ctx.moveTo(from.x, from.y);
+            ctx.lineTo(to.x, to.y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(to.x, to.y);
+            ctx.lineTo(to.x - headlen * Math.cos(angle - Math.PI / 6), to.y - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(to.x - headlen * Math.cos(angle + Math.PI / 6), to.y - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.lineTo(to.x, to.y);
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const origin = project(0, 0, 0);
+
+            // Draw Axes
+            const xAxis = project(5, 0, 0);
+            const yAxis = project(0, 5, 0);
+            const zAxis = project(0, 0, 5);
+
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+
+            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(xAxis.x, xAxis.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(yAxis.x, yAxis.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(zAxis.x, zAxis.y); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw Vectors
+            const pA = project(currentA[0], currentA[1], currentA[2]);
+            const pB = project(currentB[0], currentB[1], currentB[2]);
+
+            drawArrow(origin, pA, '#38bdf8', 3);
+            drawArrow(origin, pB, '#818cf8', 3);
+
+            // Simulation point
+            if (isSimulating) {
+                const sx = currentA[0] * simProgress;
+                const sy = currentA[1] * simProgress;
+                const sz = currentA[2] * simProgress;
+                const pS = project(sx, sy, sz);
+
+                ctx.beginPath();
+                ctx.arc(pS.x, pS.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#fbbf24';
+                ctx.fill();
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#fbbf24';
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function calculate() {
+            currentA = parseVector(inputA.value);
+            currentB = parseVector(inputB.value);
+
+            const a3 = [currentA[0] || 0, currentA[1] || 0, currentA[2] || 0];
+            const b3 = [currentB[0] || 0, currentB[1] || 0, currentB[2] || 0];
+
+            currentA = a3; currentB = b3;
+
+            const magA = Math.sqrt(a3[0] ** 2 + a3[1] ** 2 + a3[2] ** 2);
+            const magB = Math.sqrt(b3[0] ** 2 + b3[1] ** 2 + b3[2] ** 2);
+
+            outMagA.textContent = magA.toFixed(2);
+            outMagB.textContent = magB.toFixed(2);
+
+            const dot = a3[0] * b3[0] + a3[1] * b3[1] + a3[2] * b3[2];
+            outDot.textContent = dot.toFixed(2);
+
+            // Orthogonality Check
+            if (Math.abs(dot) < 0.0001 && magA > 0 && magB > 0) {
+                outPerp.textContent = "YES";
+                outPerp.className = "badge badge-success";
+            } else {
+                outPerp.textContent = "NO";
+                outPerp.className = "badge badge-error";
+            }
+
+            const cross = [
+                a3[1] * b3[2] - a3[2] * b3[1],
+                a3[2] * b3[0] - a3[0] * b3[2],
+                a3[0] * b3[1] - a3[1] * b3[0]
+            ];
+            outCross.textContent = `(${cross[0]}, ${cross[1]}, ${cross[2]})`;
+
+            if (magA > 0 && magB > 0) {
+                let cosTheta = dot / (magA * magB);
+                cosTheta = Math.max(-1, Math.min(1, cosTheta));
+                const angleDeg = Math.acos(cosTheta) * (180 / Math.PI);
+                outAngle.textContent = angleDeg.toFixed(1) + "°";
+            } else {
+                outAngle.textContent = "0.0°";
+            }
+
+            if (magA > 0) {
+                const unitA = a3.map(v => (v / magA).toFixed(2));
+                outUnitA.textContent = `(${unitA.join(', ')})`;
+            } else {
+                outUnitA.textContent = "(0, 0, 0)";
+            }
+
+            draw();
+        }
+
+        function animate() {
+            if (!isSimulating) return;
+            simProgress += 0.02;
+            if (simProgress > 1) {
+                simProgress = 0;
+                isSimulating = false;
+            }
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        inputA.addEventListener('input', calculate);
+        inputB.addEventListener('input', calculate);
+        btnSimulate.addEventListener('click', () => {
+            isSimulating = true;
+            simProgress = 0;
+            animate();
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Init
+        resizeCanvas();
+        calculate();
+    </script>
+
+</body>
+
+</html>
