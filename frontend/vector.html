@@ -4,23 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3. Vector Analyzer for Game/Graphics</title>
+    <title>Vector Analyzer Pro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --accent-primary: #38bdf8;
-            --accent-secondary: #818cf8;
+            --bg-base: #020617;
+            --bg-gradient-1: #0f172a;
+            --bg-gradient-2: #1e1b4b;
+            --card-bg: rgba(15, 23, 42, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-primary: #0ea5e9;
+            --accent-primary-glow: rgba(14, 165, 233, 0.5);
+            --accent-secondary: #8b5cf6;
+            --accent-secondary-glow: rgba(139, 92, 246, 0.5);
             --accent-success: #10b981;
-            --accent-error: #ef4444;
-            --text-main: #f1f5f9;
+            --accent-error: #f43f5e;
+            --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --highlight: #fbbf24;
+            --highlight: #f59e0b;
         }
 
         * {
@@ -31,175 +36,329 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg-base);
             background-image:
-                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.15) 0px, transparent 50%);
+                radial-gradient(circle at 15% 50%, rgba(14, 165, 233, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+            background-attachment: fixed;
             color: var(--text-main);
             line-height: 1.6;
             padding: 40px 20px;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-primary-glow);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-secondary-glow);
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(50px, 50px) scale(1.1);
+            }
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
+            position: relative;
         }
 
         header {
-            margin-bottom: 40px;
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent-primary);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
         }
 
         .main-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: inline-block;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            z-index: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--accent-primary);
-        }
-
-        .section-title {
-            color: var(--accent-secondary);
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            color: #fff;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        ul {
-            list-style: none;
-            margin-bottom: 20px;
-        }
-
-        li {
-            position: relative;
-            padding-left: 24px;
-            margin-bottom: 8px;
-            color: var(--text-dim);
-        }
-
-        li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: var(--accent-primary);
-            font-weight: bold;
-        }
-
-        .grid {
+        /* Algorithm Row Layout */
+        .algorithm-row {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .algo-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .algo-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .algo-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .algo-formula {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--accent-primary);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 992px) {
-            .grid {
+            .main-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
             }
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            position: relative;
         }
 
         label {
-            display: block;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
             color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        .color-indicator {
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            letter-spacing: 0.5px;
+        }
+
+        .color-blue {
+            color: var(--accent-primary);
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .color-purple {
+            color: var(--accent-secondary);
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
         }
 
         input {
             width: 100%;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px 20px;
             color: white;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         input:focus {
             outline: none;
+            background: rgba(0, 0, 0, 0.5);
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .output-panel {
-            background: rgba(15, 23, 42, 0.3);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px dashed var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         .result-item {
-            margin-bottom: 12px;
-            font-family: 'JetBrains Mono', monospace;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 8px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .result-item:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
         }
 
         .result-label {
             color: var(--text-dim);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .result-value {
-            color: var(--accent-primary);
-            font-weight: 600;
-        }
-
-        .algorithm-box {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 16px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--text-dim);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
-        .math-sym {
-            color: var(--accent-secondary);
+        .value-highlight {
+            color: var(--highlight);
         }
 
         .visualizer-container {
             width: 100%;
-            height: 350px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 16px;
+            height: 400px;
+            background: #000;
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
-            margin-top: 20px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 50px rgba(14, 165, 233, 0.1);
+            margin-bottom: 24px;
         }
 
         canvas {
@@ -208,185 +367,221 @@
             cursor: crosshair;
         }
 
-        .badge {
-            padding: 4px 10px;
-            border-radius: 6px;
+        .canvas-label {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 6px 12px;
+            border-radius: 8px;
             font-size: 0.75rem;
+            color: var(--text-dim);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .badge-success {
-            background: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.15);
             color: var(--accent-success);
-            border: 1px solid var(--accent-success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
         }
 
         .badge-error {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(244, 63, 94, 0.15);
             color: var(--accent-error);
-            border: 1px solid var(--accent-error);
+            border: 1px solid rgba(244, 63, 94, 0.3);
         }
 
         .btn {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), #3b82f6);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-size: 1.05rem;
             font-weight: 600;
+            font-family: 'Outfit', sans-serif;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 15px;
+            justify-content: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px -5px rgba(14, 165, 233, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
         }
 
         .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(14, 165, 233, 0.5);
+        }
+
+        .btn:hover::after {
+            left: 150%;
         }
 
         .btn:active {
             transform: translateY(0);
         }
 
-        /* Micro-animations */
-        .card:hover {
-            transform: translateY(-5px);
+        .btn-random {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-primary);
-            margin-bottom: 16px;
+        .btn-random:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-random:active {
+            transform: translateY(0);
         }
     </style>
 </head>
 
 <body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
 
     <div class="container">
         <header>
             <div class="status-badge">Enhanced Pro Tool</div>
-            <h1 class="main-title">3. Vector Analyzer for Game/Graphics</h1>
+            <h1 class="main-title">Vector Analyzer</h1>
+            <p class="subtitle">เครื่องมือวิเคราะห์เวกเตอร์ขั้นสูง สำหรับงานคำนวณเกมและกราฟิก 3 มิติ</p>
         </header>
 
-        <div class="grid">
-            <!-- Left Column: Info & Requirements -->
-            <div class="info-section">
-                <div class="card">
-                    <h2 title="Concept">🎯 แนวคิด</h2>
-                    <p style="margin-bottom: 15px; color: var(--text-dim);">
-                        เครื่องมือวิเคราะห์เวกเตอร์สำหรับงานเกม/กราฟิก</p>
+        <div class="algorithm-row">
+            <div class="algo-item">
+                <span class="algo-label">ขนาดเวกเตอร์</span>
+                <span class="algo-formula">sqrt(x² + y² + z²)</span>
+            </div>
+            <div class="algo-item">
+                <span class="algo-label">Dot Product</span>
+                <span class="algo-formula">Σ (aᵢ * bᵢ)</span>
+            </div>
+            <div class="algo-item">
+                <span class="algo-label">Cross Product</span>
+                <span class="algo-formula">det 3x3</span>
+            </div>
+            <div class="algo-item">
+                <span class="algo-label">มุมระหว่างเวกเตอร์</span>
+                <span class="algo-formula">cos⁻¹(A·B / (|A|*|B|))</span>
+            </div>
+        </div>
 
-                    <div class="section-title">🧠 เนื้อหา</div>
-                    <ul>
-                        <li>เวกเตอร์ 2D/3D</li>
-                        <li>ขนาดเวกเตอร์ (Magnitude)</li>
-                        <li>Dot / Cross product</li>
-                        <li>Unit vector (Normalization)</li>
-                        <li>ตรวจขนาน และมุมระหว่างเวกเตอร์</li>
-                    </ul>
-
-                    <div class="section-title">🛠️ Requirement โปรแกรมต้อง:</div>
-                    <ul>
-                        <li>รับเวกเตอร์ 2 ตัว</li>
-                        <li>คำนวณ Magnitude, Unit Vector</li>
-                        <li>คำนวณ Dot / Cross Product</li>
-                        <li>คำนวณมุมระหว่างเวกเตอร์</li>
-                    </ul>
+        <div class="main-grid">
+            <!-- Left Column: Inputs & Outputs -->
+            <div class="card control-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin-bottom: 0;">⚙️ ตั้งค่าเวกเตอร์ (Input)</h2>
+                    <button class="btn-random" id="btnRandom" title="สุ่มเวกเตอร์ A และ B">🎲 สุ่มเลข</button>
                 </div>
 
-                <div class="card" style="border-left: 4px solid var(--highlight);">
-                    <h2 style="color: var(--highlight);">⭐ Challenge</h2>
-                    <ul>
-                        <li>แสดงกราฟเวกเตอร์ (Interactive Canvas)</li>
-                        <li>ใช้ใน Simulation การเคลื่อนที่</li>
-                        <li>ตรวจว่าเวกเตอร์ตั้งฉากหรือไม่</li>
-                    </ul>
-                    <div class="algorithm-box">
-                        <div>• Perpendicular IF <span class="math-sym">A · B = 0</span></div>
+                <div class="input-group">
+                    <label for="vecA">
+                        เวกเตอร์ A (x, y, z)
+                        <span class="color-indicator color-blue">สีฟ้า</span>
+                    </label>
+                    <input type="text" id="vecA" value="1, 2, 3" placeholder="เช่น 1, 2, 3">
+                </div>
+
+                <div class="input-group">
+                    <label for="vecB">
+                        เวกเตอร์ B (x, y, z)
+                        <span class="color-indicator color-purple">สีม่วง</span>
+                    </label>
+                    <input type="text" id="vecB" value="4, 5, 6" placeholder="เช่น 4, 5, 6">
+                </div>
+
+                <h2 style="margin-top: 30px;">📊 ผลการวิเคราะห์ (Output)</h2>
+                <div class="output-panel">
+                    <div class="result-item">
+                        <span class="result-label">ขนาดเวกเตอร์ A (|A|)</span>
+                        <span class="result-value" id="outMagA">0.00</span>
                     </div>
-                </div>
-
-                <div class="card">
-                    <h2>💡 Algorithm</h2>
-                    <div class="algorithm-box">
-                        <div>• magnitude = <span class="math-sym">sqrt(x² + y² + z²)</span></div>
-                        <div style="margin-top: 8px;">• dot = <span class="math-sym">Σ ai * bi</span></div>
-                        <div style="margin-top: 8px;">• cross = <span class="math-sym">determinant 3x3</span></div>
-                        <div style="margin-top: 8px;">• angle = <span class="math-sym">cos⁻¹(dot / (|A| * |B|))</span>
-                        </div>
+                    <div class="result-item">
+                        <span class="result-label">ขนาดเวกเตอร์ B (|B|)</span>
+                        <span class="result-value" id="outMagB">0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">ผลคูณสเกลาร์ (Dot)</span>
+                        <span class="result-value value-highlight" id="outDot">0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">ผลคูณเวกเตอร์ (Cross)</span>
+                        <span class="result-value value-highlight" id="outCross">(0, 0, 0)</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">มุมระหว่างเวกเตอร์</span>
+                        <span class="result-value" id="outAngle">0.00°</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">เวกเตอร์หนึ่งหน่วย A</span>
+                        <span class="result-value" id="outUnitA" style="font-size: 0.95rem;">(0, 0, 0)</span>
+                    </div>
+                    <div class="result-item" style="border: none; padding-bottom: 0;">
+                        <span class="result-label">ตั้งฉากกันหรือไม่?</span>
+                        <span id="outPerp" class="badge badge-error">ไม่ตั้งฉาก (NO)</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Interactive Tool -->
-            <div class="tool-section">
-                <div class="card">
-                    <h2>📥 Input</h2>
-                    <div class="input-group">
-                        <label for="vecA">Vector A (x, y, z) <span
-                                style="color:var(--accent-primary); font-weight:bold;">— Blue</span></label>
-                        <input type="text" id="vecA" value="1, 2, 3" placeholder="e.g. 1, 2, 3">
-                    </div>
-                    <div class="input-group">
-                        <label for="vecB">Vector B (x, y, z) <span
-                                style="color:var(--accent-secondary); font-weight:bold;">— Purple</span></label>
-                        <input type="text" id="vecB" value="4, 5, 6" placeholder="e.g. 4, 5, 6">
-                    </div>
-
-                    <div class="visualizer-container">
-                        <canvas id="vectorCanvas"></canvas>
-                        <div
-                            style="position: absolute; bottom: 10px; right: 10px; font-size: 0.7rem; color: var(--text-dim);">
-                            *3D Isometric View (Projected)
-                        </div>
-                    </div>
-
-                    <button class="btn" id="btnSimulate">
-                        <span>▶️ Run Movement Simulation</span>
-                    </button>
-
-                    <h2 style="margin-top: 40px;">📤 Output</h2>
-                    <div class="output-panel">
-                        <div class="result-item">
-                            <span class="result-label">|A| (Magnitude)</span>
-                            <span class="result-value" id="outMagA">0.00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">|B| (Magnitude)</span>
-                            <span class="result-value" id="outMagB">0.00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Dot Product</span>
-                            <span class="result-value" id="outDot">0.00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Cross Product</span>
-                            <span class="result-value" id="outCross">(0, 0, 0)</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Angle (Degrees)</span>
-                            <span class="result-value" id="outAngle">0.00°</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Perpendicular?</span>
-                            <span id="outPerp" class="badge badge-error">NO</span>
-                        </div>
-                        <div class="result-item" style="border: none;">
-                            <span class="result-label">Unit Vector A</span>
-                            <span class="result-value" id="outUnitA">(0, 0, 0)</span>
-                        </div>
+            <!-- Right Column: Visualizer -->
+            <div class="card canvas-panel">
+                <h2>👁️ ภาพจำลอง (Visualizer)</h2>
+                <div class="visualizer-container">
+                    <canvas id="vectorCanvas"></canvas>
+                    <div class="canvas-label">
+                        *มุมมอง 3D Isometric
                     </div>
                 </div>
+
+                <button class="btn" id="btnSimulate">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    จำลองการเคลื่อนที่ (Simulate)
+                </button>
             </div>
         </div>
     </div>
@@ -481,8 +676,8 @@
             const pA = project(currentA[0], currentA[1], currentA[2]);
             const pB = project(currentB[0], currentB[1], currentB[2]);
 
-            drawArrow(origin, pA, '#38bdf8', 3);
-            drawArrow(origin, pB, '#818cf8', 3);
+            drawArrow(origin, pA, '#0ea5e9', 3);
+            drawArrow(origin, pB, '#8b5cf6', 3);
 
             // Simulation point
             if (isSimulating) {
@@ -493,10 +688,10 @@
 
                 ctx.beginPath();
                 ctx.arc(pS.x, pS.y, 6, 0, Math.PI * 2);
-                ctx.fillStyle = '#fbbf24';
+                ctx.fillStyle = '#f59e0b';
                 ctx.fill();
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = '#fbbf24';
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#f59e0b';
                 ctx.stroke();
                 ctx.shadowBlur = 0;
             }
@@ -522,10 +717,10 @@
 
             // Orthogonality Check
             if (Math.abs(dot) < 0.0001 && magA > 0 && magB > 0) {
-                outPerp.textContent = "YES";
+                outPerp.textContent = "ตั้งฉาก (YES)";
                 outPerp.className = "badge badge-success";
             } else {
-                outPerp.textContent = "NO";
+                outPerp.textContent = "ไม่ตั้งฉาก (NO)";
                 outPerp.className = "badge badge-error";
             }
 
@@ -576,11 +771,18 @@
 
         window.addEventListener('resize', resizeCanvas);
 
+        const btnRandom = document.getElementById('btnRandom');
+        btnRandom.addEventListener('click', () => {
+            const getRandom = () => Math.floor(Math.random() * 21) - 10; // สุ่มระหว่าง -10 ถึง 10
+            inputA.value = `${getRandom()}, ${getRandom()}, ${getRandom()}`;
+            inputB.value = `${getRandom()}, ${getRandom()}, ${getRandom()}`;
+            calculate();
+        });
+
         // Init
         resizeCanvas();
         calculate();
     </script>
-
 </body>
 
 </html>
