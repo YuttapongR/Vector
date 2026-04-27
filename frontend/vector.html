@@ -74,12 +74,15 @@
             animation-delay: -10s;
         }
 
+        /* กำหนดขั้นตอนแอนิเมชัน: ขยับลอยไปมาและขยายขนาด */
         @keyframes float {
             0% {
+                /* เริ่มต้น: อยู่กับที่ */
                 transform: translate(0, 0) scale(1);
             }
 
             100% {
+                /* สิ้นสุด: ขยับไป 50px และขยาย 1.1 เท่า */
                 transform: translate(50px, 50px) scale(1.1);
             }
         }
@@ -96,13 +99,16 @@
             animation: fadeInDown 0.8s ease-out;
         }
 
+        /* กำหนดขั้นตอนแอนิเมชัน: ค่อยๆ เลื่อนลงและปรากฏขึ้น */
         @keyframes fadeInDown {
             from {
+                /* จุดเริ่มต้น: จางและลอยขึ้น */
                 opacity: 0;
                 transform: translateY(-20px);
             }
 
             to {
+                /* จุดสิ้นสุด: ชัดเจนและกลับที่เดิม */
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -230,24 +236,30 @@
             animation: fadeInUp 0.8s ease-out 0.4s both;
         }
 
+        /* กำหนดขั้นตอนแอนิเมชัน: ค่อยๆ เลื่อนขึ้นและปรากฏขึ้น */
         @keyframes fadeInUp {
             from {
+                /* จุดเริ่มต้น: จางและลอยต่ำลงไป 20px */
                 opacity: 0;
                 transform: translateY(20px);
             }
 
             to {
+                /* จุดสิ้นสุด: ชัดเจนและกลับที่เดิม */
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+        /* ปรับแต่งหน้าจอสำหรับอุปกรณ์ที่กว้างไม่เกิน 992px (เช่น Tablet หรือ Laptop จอเล็ก) */
         @media (max-width: 992px) {
             .main-grid {
+                /* ปรับจาก 2 คอลัมน์ให้เหลือแถวละ 1 คอลัมน์ */
                 grid-template-columns: 1fr;
             }
 
             .main-title {
+                /* ลดขนาดหัวข้อลง */
                 font-size: 2.5rem;
             }
         }
@@ -587,200 +599,317 @@
     </div>
 
     <script>
+        // ดึงอิลิเมนต์ input สำหรับเวกเตอร์ A จาก HTML ตาม id
         const inputA = document.getElementById('vecA');
+        // ดึงอิลิเมนต์ input สำหรับเวกเตอร์ B จาก HTML ตาม id
         const inputB = document.getElementById('vecB');
+        // ดึงปุ่มจำลองการเคลื่อนที่จาก HTML ตาม id
         const btnSimulate = document.getElementById('btnSimulate');
 
+        // ดึงอิลิเมนต์แสดงผลลัพธ์ขนาดของเวกเตอร์ A
         const outMagA = document.getElementById('outMagA');
+        // ดึงอิลิเมนต์แสดงผลลัพธ์ขนาดของเวกเตอร์ B
         const outMagB = document.getElementById('outMagB');
+        // ดึงอิลิเมนต์แสดงผลลัพธ์การคูณแบบดอท (Dot Product)
         const outDot = document.getElementById('outDot');
+        // ดึงอิลิเมนต์แสดงผลลัพธ์การคูณแบบครอส (Cross Product)
         const outCross = document.getElementById('outCross');
+        // ดึงอิลิเมนต์แสดงผลลัพธ์มุมระหว่างเวกเตอร์
         const outAngle = document.getElementById('outAngle');
+        // ดึงอิลิเมนต์แสดงผลลัพธ์การตรวจสอบการตั้งฉาก
         const outPerp = document.getElementById('outPerp');
+        // ดึงอิลิเมนต์แสดงผลลัพธ์เวกเตอร์หนึ่งหน่วยของ A
         const outUnitA = document.getElementById('outUnitA');
 
+        // ดึงอิลิเมนต์ canvas ที่ใช้สำหรับวาดภาพจำลองเวกเตอร์
         const canvas = document.getElementById('vectorCanvas');
+        // สร้าง context แบบ 2D สำหรับวาดรูปบน canvas
         const ctx = canvas.getContext('2d');
 
+        // ตัวแปรเก็บความคืบหน้าของแอนิเมชันจำลองการเคลื่อนที่ (0 ถึง 1)
         let simProgress = 0;
+        // ตัวแปรเช็คสถานะว่ากำลังเล่นแอนิเมชันอยู่หรือไม่
         let isSimulating = false;
+        // ค่าเริ่มต้นของเวกเตอร์ A (x, y, z)
         let currentA = [1, 2, 3];
+        // ค่าเริ่มต้นของเวกเตอร์ B (x, y, z)
         let currentB = [4, 5, 6];
 
+        // ฟังก์ชันสำหรับปรับขนาด canvas ให้พอดีกับขนาดที่แสดงผลบนหน้าจอ
         function resizeCanvas() {
+            // ตั้งค่าความกว้างของ canvas ให้เท่ากับความกว้างของตัวคอนเทนเนอร์
             canvas.width = canvas.offsetWidth;
+            // ตั้งค่าความสูงของ canvas ให้เท่ากับความสูงของตัวคอนเทนเนอร์
             canvas.height = canvas.offsetHeight;
+            // เรียกฟังก์ชันวาดใหม่เมื่อปรับขนาดเสร็จ
             draw();
         }
 
+        // ฟังก์ชันแปลงข้อความเวกเตอร์ (เช่น "1, 2, 3") ให้เป็นอาร์เรย์ตัวเลข
         function parseVector(str) {
+            // แยกข้อความด้วยลูกน้ำ ตัดช่องว่างทิ้ง และแปลงเป็นทศนิยม หากแปลงไม่ได้ให้เป็น 0
             return str.split(',').map(v => parseFloat(v.trim()) || 0);
         }
 
-        // Isometric-like 3D to 2D projection
+        // ฟังก์ชันฉายภาพ 3 มิติ (x, y, z) ให้กลายเป็นพิกัด 2 มิติ (x, y) บน canvas (Isometric)
         function project(x, y, z) {
+            // กำหนดสเกลขยายขนาดภาพ
             const scale = 30;
+            // หาจุดกึ่งกลางของ canvas ในแนวนอน
             const centerX = canvas.width / 2;
+            // หาจุดกึ่งกลางของ canvas ในแนวตั้ง เลื่อนลงมาเล็กน้อย (50px)
             const centerY = canvas.height / 2 + 50;
 
-            // Simple projection: Y axis is up, X/Z are angled
+            // คำนวณพิกัด x บน canvas โดยนำแนวแกน z มาทำให้เกิดมุมมองเฉียง
             const px = centerX + (x - z * 0.5) * scale;
+            // คำนวณพิกัด y บน canvas (บนจอ y มีค่าเพิ่มลงล่าง จึงต้องลบ) นำแกน z มาเสริมมุมเฉียง
             const py = centerY - (y + z * 0.5) * scale;
 
+            // ส่งคืนพิกัด 2 มิติ
             return { x: px, y: py };
         }
 
+        // ฟังก์ชันวาดลูกศรบน canvas
         function drawArrow(from, to, color, width = 3) {
+            // กำหนดความยาวของหัวลูกศร
             const headlen = 10;
+            // หาระยะห่างแกน x ระหว่างจุดปลายและจุดเริ่มต้น
             const dx = to.x - from.x;
+            // หาระยะห่างแกน y ระหว่างจุดปลายและจุดเริ่มต้น
             const dy = to.y - from.y;
+            // คำนวณมุมของเส้นตรงเพื่อวาดหัวลูกศรให้ถูกทิศทาง
             const angle = Math.atan2(dy, dx);
 
+            // เริ่มเส้นใหม่
             ctx.beginPath();
+            // ย้ายจุดเริ่มต้นไปที่พิกัด from
             ctx.moveTo(from.x, from.y);
+            // ลากเส้นไปที่พิกัด to
             ctx.lineTo(to.x, to.y);
+            // กำหนดสีของเส้น
             ctx.strokeStyle = color;
+            // กำหนดความหนาของเส้น
             ctx.lineWidth = width;
+            // กำหนดให้ปลายเส้นมีความโค้งมน
             ctx.lineCap = 'round';
+            // วาดเส้นลงบน canvas
             ctx.stroke();
 
+            // เริ่มวาดรูปหัวลูกศร (สามเหลี่ยม)
             ctx.beginPath();
+            // เริ่มต้นที่จุดปลายของเส้น
             ctx.moveTo(to.x, to.y);
+            // ลากเส้นไปที่มุมซ้ายของหัวลูกศร
             ctx.lineTo(to.x - headlen * Math.cos(angle - Math.PI / 6), to.y - headlen * Math.sin(angle - Math.PI / 6));
+            // ลากเส้นไปที่มุมขวาของหัวลูกศร
             ctx.lineTo(to.x - headlen * Math.cos(angle + Math.PI / 6), to.y - headlen * Math.sin(angle + Math.PI / 6));
+            // ลากกลับมาที่จุดปลายอีกครั้ง
             ctx.lineTo(to.x, to.y);
+            // กำหนดสีพื้นหลังหัวลูกศร
             ctx.fillStyle = color;
+            // ระบายสีลงไป
             ctx.fill();
         }
 
+        // ฟังก์ชันหลักที่ใช้วาดทุกอย่างบน canvas
         function draw() {
+            // ล้างหน้าจอ canvas ทั้งหมดก่อนเริ่มวาดใหม่
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // หาพิกัด 2 มิติของจุดกำเนิด (0, 0, 0)
             const origin = project(0, 0, 0);
 
-            // Draw Axes
+            // คำนวณพิกัดปลายแกน x, y, z (ความยาวแกนละ 5 หน่วย)
             const xAxis = project(5, 0, 0);
             const yAxis = project(0, 5, 0);
             const zAxis = project(0, 0, 5);
 
+            // กำหนดรูปแบบเส้นประสำหรับวาดแกน
             ctx.setLineDash([5, 5]);
+            // กำหนดสีเส้นแกน (ขาวโปร่งใส)
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            // กำหนดความหนาของเส้นแกน
             ctx.lineWidth = 1;
 
+            // วาดเส้นแกน X
             ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(xAxis.x, xAxis.y); ctx.stroke();
+            // วาดเส้นแกน Y
             ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(yAxis.x, yAxis.y); ctx.stroke();
+            // วาดเส้นแกน Z
             ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(zAxis.x, zAxis.y); ctx.stroke();
+            // ยกเลิกเส้นประ กลับมาใช้เส้นทึบตามปกติ
             ctx.setLineDash([]);
 
-            // Draw Vectors
+            // แปลงพิกัด 3 มิติของเวกเตอร์ A และ B ให้อยู่บนผืนผ้า 2 มิติ
             const pA = project(currentA[0], currentA[1], currentA[2]);
             const pB = project(currentB[0], currentB[1], currentB[2]);
 
+            // วาดลูกศรเวกเตอร์ A ด้วยสีฟ้า
             drawArrow(origin, pA, '#0ea5e9', 3);
+            // วาดลูกศรเวกเตอร์ B ด้วยสีม่วง
             drawArrow(origin, pB, '#8b5cf6', 3);
 
-            // Simulation point
+            // ส่วนของการวาดแอนิเมชันจุดเคลื่อนที่ตามเวกเตอร์ A
             if (isSimulating) {
+                // คำนวณตำแหน่งจุดตามความคืบหน้า (simProgress จาก 0 ไป 1)
                 const sx = currentA[0] * simProgress;
                 const sy = currentA[1] * simProgress;
                 const sz = currentA[2] * simProgress;
+                // แปลงตำแหน่ง 3 มิติของจุดเป็น 2 มิติ
                 const pS = project(sx, sy, sz);
 
+                // เริ่มวาดจุด (วงกลม)
                 ctx.beginPath();
+                // กำหนดวงกลม รัศมี 6
                 ctx.arc(pS.x, pS.y, 6, 0, Math.PI * 2);
+                // กำหนดสีของวงกลม (สีส้ม/ทอง)
                 ctx.fillStyle = '#f59e0b';
+                // ระบายสี
                 ctx.fill();
+                // เพิ่มเงาเรืองแสงให้จุด
                 ctx.shadowBlur = 15;
                 ctx.shadowColor = '#f59e0b';
+                // วาดเส้นขอบวงกลม
                 ctx.stroke();
+                // ยกเลิกการแสดงเงา
                 ctx.shadowBlur = 0;
             }
         }
 
+        // ฟังก์ชันคำนวณค่าต่างๆ ของเวกเตอร์และอัปเดตหน้าจอ
         function calculate() {
+            // อ่านค่าและแปลงสตริงจาก input เป็นอาร์เรย์ตัวเลข
             currentA = parseVector(inputA.value);
             currentB = parseVector(inputB.value);
 
+            // ดึงค่ามาทีละแกน (x, y, z) ถ้าไม่มีให้ใส่ 0 แทน เพื่อป้องกันค่า undefined
             const a3 = [currentA[0] || 0, currentA[1] || 0, currentA[2] || 0];
             const b3 = [currentB[0] || 0, currentB[1] || 0, currentB[2] || 0];
 
+            // อัปเดตค่าเวกเตอร์ปัจจุบันเพื่อใช้วาดภาพ
             currentA = a3; currentB = b3;
 
+            // คำนวณขนาด (Magnitude) ของเวกเตอร์ A โดยใช้สูตรพีทาโกรัส 3 มิติ: sqrt(x² + y² + z²)
             const magA = Math.sqrt(a3[0] ** 2 + a3[1] ** 2 + a3[2] ** 2);
+            // คำนวณขนาด (ความยาว) ของเวกเตอร์ B
             const magB = Math.sqrt(b3[0] ** 2 + b3[1] ** 2 + b3[2] ** 2);
 
+            // แสดงผลขนาดเวกเตอร์โดยปัดทศนิยม 2 ตำแหน่ง
             outMagA.textContent = magA.toFixed(2);
             outMagB.textContent = magB.toFixed(2);
 
+            // คำนวณ Dot Product (x1*x2 + y1*y2 + z1*z2)
             const dot = a3[0] * b3[0] + a3[1] * b3[1] + a3[2] * b3[2];
+            // แสดงผลลัพธ์ Dot Product
             outDot.textContent = dot.toFixed(2);
 
-            // Orthogonality Check
+            // ตรวจสอบความตั้งฉาก (หาก Dot Product เป็น 0 หมายถึงเวกเตอร์ตั้งฉากกัน) ใช้ < 0.0001 เพื่อหลีกเลี่ยง error ทศนิยม
             if (Math.abs(dot) < 0.0001 && magA > 0 && magB > 0) {
+                // อัปเดตข้อความและคลาสกรณีตั้งฉาก
                 outPerp.textContent = "ตั้งฉาก (YES)";
                 outPerp.className = "badge badge-success";
             } else {
+                // อัปเดตข้อความและคลาสกรณีไม่ตั้งฉาก
                 outPerp.textContent = "ไม่ตั้งฉาก (NO)";
                 outPerp.className = "badge badge-error";
             }
 
+            // คำนวณ Cross Product (ได้ผลลัพธ์เป็นเวกเตอร์ใหม่ที่ตั้งฉากกับทั้งสองเวกเตอร์)
             const cross = [
-                a3[1] * b3[2] - a3[2] * b3[1],
-                a3[2] * b3[0] - a3[0] * b3[2],
-                a3[0] * b3[1] - a3[1] * b3[0]
+                a3[1] * b3[2] - a3[2] * b3[1], // x
+                a3[2] * b3[0] - a3[0] * b3[2], // y
+                a3[0] * b3[1] - a3[1] * b3[0]  // z
             ];
+            // แสดงผลลัพธ์ Cross Product แบบเวกเตอร์ (x, y, z)
             outCross.textContent = `(${cross[0]}, ${cross[1]}, ${cross[2]})`;
 
+            // คำนวณมุมระหว่างเวกเตอร์
             if (magA > 0 && magB > 0) {
+                // หาค่า cos(theta)
                 let cosTheta = dot / (magA * magB);
+                // จำกัดค่า cosTheta ให้อยู่ในช่วง [-1, 1] (Clamping)
+                // เพื่อป้องกันปัญหาจาก Floating Point Error (เช่น 1.0000000000000002) 
+                // ซึ่งจะทำให้ Math.acos() คืนค่าเป็น NaN
                 cosTheta = Math.max(-1, Math.min(1, cosTheta));
+                // ใช้ Math.acos (Inverse Cosine) เพื่อหามุมกลับมาจากค่า cosTheta 
+                // ผลลัพธ์ที่ได้จะเป็นหน่วยเรเดียน (Radians) จึงต้องคูณด้วย (180 / PI) เพื่อแปลงเป็นหน่วยองศา (Degrees)
                 const angleDeg = Math.acos(cosTheta) * (180 / Math.PI);
+                // แสดงผลมุมเป็นองศา
                 outAngle.textContent = angleDeg.toFixed(1) + "°";
             } else {
+                // ถ้ามีเวกเตอร์ใดเวกเตอร์หนึ่งมีขนาดเป็น 0 มุมจะเป็น 0 องศา
                 outAngle.textContent = "0.0°";
             }
 
+            // คำนวณเวกเตอร์หนึ่งหน่วย (Unit Vector) ของ A
             if (magA > 0) {
+                // หารสมาชิกแต่ละแกนด้วยขนาดของเวกเตอร์ เพื่อให้ความยาวรวมเท่ากับ 1
                 const unitA = a3.map(v => (v / magA).toFixed(2));
+                // แสดงผลเวกเตอร์หนึ่งหน่วย
                 outUnitA.textContent = `(${unitA.join(', ')})`;
             } else {
+                // ถ้าขนาดเป็น 0 ไม่สามารถหาเวกเตอร์หนึ่งหน่วยได้
                 outUnitA.textContent = "(0, 0, 0)";
             }
 
+            // สั่งให้วาดกราฟิกบน canvas ใหม่เมื่อคำนวณเสร็จสิ้น
             draw();
         }
 
+        // ฟังก์ชันเล่นแอนิเมชันจุดเคลื่อนที่
         function animate() {
+            // ถ้าไม่ได้อยู่ในสถานะจำลองการเคลื่อนที่ ให้หยุดทำงาน
             if (!isSimulating) return;
+            // เพิ่มความคืบหน้าทีละ 0.02 ต่อเฟรม
             simProgress += 0.02;
+            // เมื่อจุดวิ่งจนสุดสาย (ครบ 100%)
             if (simProgress > 1) {
+                // รีเซ็ตความคืบหน้ากลับเป็น 0
                 simProgress = 0;
+                // สิ้นสุดการจำลอง
                 isSimulating = false;
             }
+            // เรียกฟังก์ชันวาดใหม่เพื่ออัปเดตตำแหน่งจุด
             draw();
+            // สั่งให้เรียกฟังก์ชัน animate วนซ้ำในการวาดเฟรมถัดไปของเบราว์เซอร์
             requestAnimationFrame(animate);
         }
 
+        // ดักจับเหตุการณ์การพิมพ์ข้อความในช่องเวกเตอร์ A หากมีการพิมพ์ ให้คำนวณใหม่
         inputA.addEventListener('input', calculate);
+        // ดักจับเหตุการณ์การพิมพ์ข้อความในช่องเวกเตอร์ B หากมีการพิมพ์ ให้คำนวณใหม่
         inputB.addEventListener('input', calculate);
+        // ดักจับเหตุการณ์การคลิกปุ่ม "จำลองการเคลื่อนที่"
         btnSimulate.addEventListener('click', () => {
+            // เปิดสถานะให้เริ่มจำลองการเคลื่อนที่
             isSimulating = true;
+            // รีเซ็ตจุดเริ่มต้น
             simProgress = 0;
+            // เรียกใช้งานฟังก์ชันเล่นแอนิเมชัน
             animate();
         });
 
+        // ดักจับเหตุการณ์เมื่อหน้าต่างเบราว์เซอร์ปรับขนาด เพื่อปรับขนาด canvas ตาม
         window.addEventListener('resize', resizeCanvas);
 
+        // ดึงปุ่มสุ่มตัวเลขจาก HTML
         const btnRandom = document.getElementById('btnRandom');
+        // ดักจับเหตุการณ์คลิกปุ่มสุ่มตัวเลข
         btnRandom.addEventListener('click', () => {
-            const getRandom = () => Math.floor(Math.random() * 21) - 10; // สุ่มระหว่าง -10 ถึง 10
+            // ฟังก์ชันย่อยสำหรับสุ่มตัวเลขจำนวนเต็มระหว่าง -10 ถึง 10
+            const getRandom = () => Math.floor(Math.random() * 21) - 10;
+            // สุ่มตัวเลขและแทนที่ค่าในช่อง input ของเวกเตอร์ A
             inputA.value = `${getRandom()}, ${getRandom()}, ${getRandom()}`;
+            // สุ่มตัวเลขและแทนที่ค่าในช่อง input ของเวกเตอร์ B
             inputB.value = `${getRandom()}, ${getRandom()}, ${getRandom()}`;
+            // เมื่อแทนที่เสร็จแล้ว สั่งให้คำนวณค่าใหม่ทันที
             calculate();
         });
 
-        // Init
+        // ตั้งค่าเริ่มต้นของโปรแกรม
+        // ปรับขนาด canvas ให้เข้ากับหน้าจอตั้งแต่เริ่มต้น
         resizeCanvas();
+        // เรียกคำนวณครั้งแรกตามค่าเริ่มต้นที่มีอยู่ในกล่อง input
         calculate();
     </script>
 </body>
