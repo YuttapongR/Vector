@@ -12,19 +12,19 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-base: #020617;
-            --bg-gradient-1: #0f172a;
-            --bg-gradient-2: #1e1b4b;
-            --card-bg: rgba(15, 23, 42, 0.4);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --accent-primary: #0ea5e9;
-            --accent-primary-glow: rgba(14, 165, 233, 0.5);
+            --bg-base: #f8fafc;
+            --bg-gradient-1: #e0e7ff;
+            --bg-gradient-2: #f1f5f9;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+            --accent-primary: #3b82f6;
+            --accent-primary-glow: rgba(59, 130, 246, 0.4);
             --accent-secondary: #8b5cf6;
-            --accent-secondary-glow: rgba(139, 92, 246, 0.5);
+            --accent-secondary-glow: rgba(139, 92, 246, 0.4);
             --accent-success: #10b981;
-            --accent-error: #f43f5e;
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
+            --accent-error: #ef4444;
+            --text-main: #1e293b;
+            --text-dim: #01285f;
             --highlight: #f59e0b;
         }
 
@@ -35,11 +35,11 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Outfit', 'Prompt', sans-serif;
             background-color: var(--bg-base);
             background-image:
-                radial-gradient(circle at 15% 50%, rgba(14, 165, 233, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 40%);
             background-attachment: fixed;
             color: var(--text-main);
             line-height: 1.6;
@@ -149,12 +149,10 @@
 
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
@@ -302,29 +300,28 @@
 
         input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
             border-radius: 16px;
             padding: 16px 20px;
-            color: white;
+            color: var(--text-main);
             font-family: 'JetBrains Mono', monospace;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         input:focus {
             outline: none;
-            background: rgba(0, 0, 0, 0.5);
+            background: #ffffff;
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
         }
 
         .output-panel {
-            background: rgba(0, 0, 0, 0.2);
+            background: #f8fafc;
             border-radius: 20px;
             padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -335,7 +332,7 @@
             justify-content: space-between;
             align-items: center;
             padding-bottom: 16px;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            border-bottom: 1px dashed #cbd5e1;
         }
 
         .result-item:last-child {
@@ -344,33 +341,32 @@
         }
 
         .result-label {
-            color: var(--text-dim);
+            color: var(--text-main);
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .result-value {
             font-family: 'JetBrains Mono', monospace;
-            color: #fff;
+            color: var(--text-main);
             font-size: 1.1rem;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            font-weight: 700;
         }
 
         .value-highlight {
-            color: var(--highlight);
+            color: var(--accent-primary);
         }
 
         .visualizer-container {
             width: 100%;
             height: 400px;
-            background: #000;
+            background: #ffffff;
             border-radius: 20px;
             overflow: hidden;
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: inset 0 0 50px rgba(14, 165, 233, 0.1);
+            border: 2px solid #e2e8f0;
             margin-bottom: 24px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.02);
         }
 
         canvas {
@@ -498,7 +494,7 @@
         <header>
             <div class="status-badge">Enhanced Pro Tool</div>
             <h1 class="main-title">Vector Analyzer</h1>
-            <p class="subtitle">เครื่องมือวิเคราะห์เวกเตอร์ขั้นสูง สำหรับงานคำนวณเกมและกราฟิก 3 มิติ</p>
+            <p class="subtitle">เครื่องมือวิเคราะห์เวกเตอร์ขั้นสูง สำหรับงานคำนวณเกมและกราฟิก 2 มิติ และ 3 มิติ</p>
         </header>
 
         <div class="algorithm-row">
@@ -548,31 +544,63 @@
                 <div class="output-panel">
                     <div class="result-item">
                         <span class="result-label">ขนาดเวกเตอร์ A (|A|)</span>
-                        <span class="result-value" id="outMagA">0.00</span>
+                        <div style="text-align: right;">
+                            <div id="calcMagA"
+                                style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace;">
+                            </div>
+                            <span class="result-value" id="outMagA">0.00</span>
+                        </div>
                     </div>
                     <div class="result-item">
                         <span class="result-label">ขนาดเวกเตอร์ B (|B|)</span>
-                        <span class="result-value" id="outMagB">0.00</span>
+                        <div style="text-align: right;">
+                            <div id="calcMagB"
+                                style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace;">
+                            </div>
+                            <span class="result-value" id="outMagB">0.00</span>
+                        </div>
                     </div>
                     <div class="result-item">
                         <span class="result-label">ผลคูณสเกลาร์ (Dot)</span>
-                        <span class="result-value value-highlight" id="outDot">0.00</span>
+                        <div style="text-align: right;">
+                            <div id="calcDot"
+                                style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace;">
+                            </div>
+                            <span class="result-value value-highlight" id="outDot">0.00</span>
+                        </div>
                     </div>
                     <div class="result-item">
                         <span class="result-label">ผลคูณเวกเตอร์ (Cross)</span>
-                        <span class="result-value value-highlight" id="outCross">(0, 0, 0)</span>
+                        <div style="text-align: right;">
+                            <div id="calcCross"
+                                style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace;">
+                            </div>
+                            <span class="result-value value-highlight" id="outCross">(0, 0, 0)</span>
+                        </div>
                     </div>
                     <div class="result-item">
                         <span class="result-label">มุมระหว่างเวกเตอร์</span>
-                        <span class="result-value" id="outAngle">0.00°</span>
+                        <div style="text-align: right;">
+                            <div id="calcAngle"
+                                style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace;">
+                            </div>
+                            <span class="result-value" id="outAngle">0.00°</span>
+                        </div>
                     </div>
                     <div class="result-item">
                         <span class="result-label">เวกเตอร์หนึ่งหน่วย A</span>
                         <span class="result-value" id="outUnitA" style="font-size: 0.95rem;">(0, 0, 0)</span>
                     </div>
-                    <div class="result-item" style="border: none; padding-bottom: 0;">
-                        <span class="result-label">ตั้งฉากกันหรือไม่?</span>
-                        <span id="outPerp" class="badge badge-error">ไม่ตั้งฉาก (NO)</span>
+                    <div class="result-item"
+                        style="border: none; padding-bottom: 0; flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px;">
+                            <span class="result-label">ตั้งฉากกันหรือไม่?</span>
+                            <span id="outPerp" class="badge badge-error">ไม่ตั้งฉาก (NO)</span>
+                        </div>
+                        <div id="perpReason"
+                            style="font-size: 0.85rem; color: var(--text-dim); background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; width: 100%; border: 1px solid rgba(255,255,255,0.05); line-height: 1.5;">
+                            <!-- เหตุผลและวิธีแก้จะถูกแทรกที่นี่ -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -652,18 +680,16 @@
         }
 
         // ฟังก์ชันฉายภาพ 3 มิติ (x, y, z) ให้กลายเป็นพิกัด 2 มิติ (x, y) บน canvas (Isometric)
-        function project(x, y, z) {
-            // กำหนดสเกลขยายขนาดภาพ
-            const scale = 30;
+        function project(x, y, z, customScale = 30) {
             // หาจุดกึ่งกลางของ canvas ในแนวนอน
             const centerX = canvas.width / 2;
             // หาจุดกึ่งกลางของ canvas ในแนวตั้ง เลื่อนลงมาเล็กน้อย (50px)
             const centerY = canvas.height / 2 + 50;
 
             // คำนวณพิกัด x บน canvas โดยนำแนวแกน z มาทำให้เกิดมุมมองเฉียง
-            const px = centerX + (x - z * 0.5) * scale;
+            const px = centerX + (x - z * 0.5) * customScale;
             // คำนวณพิกัด y บน canvas (บนจอ y มีค่าเพิ่มลงล่าง จึงต้องลบ) นำแกน z มาเสริมมุมเฉียง
-            const py = centerY - (y + z * 0.5) * scale;
+            const py = centerY - (y + z * 0.5) * customScale;
 
             // ส่งคืนพิกัด 2 มิติ
             return { x: px, y: py };
@@ -713,64 +739,122 @@
 
         // ฟังก์ชันหลักที่ใช้วาดทุกอย่างบน canvas
         function draw() {
-            // ล้างหน้าจอ canvas ทั้งหมดก่อนเริ่มวาดใหม่
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // ล้างหน้าจอ canvas ทั้งหมดก่อนเริ่มวาดใหม่ โดยเทสีพื้นหลังเป็นสีขาว
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // คำนวณหาค่าสูงสุดเพื่อปรับสเกลอัตโนมัติ (กำหนดขอบเขตไม่ให้ล้นภาพ)
+            const maxVal = Math.max(
+                5,
+                Math.abs(currentA[0]), Math.abs(currentA[1]), Math.abs(currentA[2]),
+                Math.abs(currentB[0]), Math.abs(currentB[1]), Math.abs(currentB[2])
+            );
+
+            // ขนาดสเกล: เอาความสูงครึ่งหนึ่งของ canvas หารด้วยค่ามากสุด พร้อมระยะเผื่อ
+            const scale = Math.min(canvas.width, canvas.height) / (maxVal * 2.8);
 
             // หาพิกัด 2 มิติของจุดกำเนิด (0, 0, 0)
-            const origin = project(0, 0, 0);
+            const origin = project(0, 0, 0, scale);
 
-            // คำนวณพิกัดปลายแกน x, y, z (ความยาวแกนละ 5 หน่วย)
-            const xAxis = project(5, 0, 0);
-            const yAxis = project(0, 5, 0);
-            const zAxis = project(0, 0, 5);
+            // ความยาวของแกนที่วาด (ยาวกว่าค่า max เล็กน้อย)
+            const axisLength = maxVal + 1;
+
+            // วาดเส้นตาราง (Grid) บนระนาบ X-Y
+            const gridSize = Math.ceil(axisLength);
+            ctx.lineWidth = 1;
+            for (let i = -gridSize; i <= gridSize; i++) {
+                // เส้นขนานกับแกน X
+                let startX = project(-gridSize, i, 0, scale);
+                let endX = project(gridSize, i, 0, scale);
+                ctx.beginPath();
+                ctx.moveTo(startX.x, startX.y);
+                ctx.lineTo(endX.x, endX.y);
+                ctx.strokeStyle = i === 0 ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.08)';
+                ctx.stroke();
+
+                // เส้นขนานกับแกน Y
+                let startY = project(i, -gridSize, 0, scale);
+                let endY = project(i, gridSize, 0, scale);
+                ctx.beginPath();
+                ctx.moveTo(startY.x, startY.y);
+                ctx.lineTo(endY.x, endY.y);
+                ctx.strokeStyle = i === 0 ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.08)';
+                ctx.stroke();
+            }
+
+            // คำนวณพิกัดปลายแกน x, y, z
+            const xAxis = project(axisLength, 0, 0, scale);
+            const yAxis = project(0, axisLength, 0, scale);
+            const zAxis = project(0, 0, axisLength, scale);
 
             // กำหนดรูปแบบเส้นประสำหรับวาดแกน
             ctx.setLineDash([5, 5]);
-            // กำหนดสีเส้นแกน (ขาวโปร่งใส)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-            // กำหนดความหนาของเส้นแกน
-            ctx.lineWidth = 1;
+            // กำหนดความหนาของเส้นแกนหลัก
+            ctx.lineWidth = 2.5;
 
-            // วาดเส้นแกน X
-            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(xAxis.x, xAxis.y); ctx.stroke();
-            // วาดเส้นแกน Y
-            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(yAxis.x, yAxis.y); ctx.stroke();
-            // วาดเส้นแกน Z
-            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(zAxis.x, zAxis.y); ctx.stroke();
+            // วาดเส้นแกน X (สีแดง)
+            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(xAxis.x, xAxis.y);
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.8)';
+            ctx.stroke();
+            // วาดเส้นแกน Y (สีเขียว)
+            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(yAxis.x, yAxis.y);
+            ctx.strokeStyle = 'rgba(34, 197, 94, 0.8)';
+            ctx.stroke();
+            // วาดเส้นแกน Z (สีน้ำเงิน)
+            ctx.beginPath(); ctx.moveTo(origin.x, origin.y); ctx.lineTo(zAxis.x, zAxis.y);
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.8)';
+            ctx.stroke();
             // ยกเลิกเส้นประ กลับมาใช้เส้นทึบตามปกติ
             ctx.setLineDash([]);
 
-            // แปลงพิกัด 3 มิติของเวกเตอร์ A และ B ให้อยู่บนผืนผ้า 2 มิติ
-            const pA = project(currentA[0], currentA[1], currentA[2]);
-            const pB = project(currentB[0], currentB[1], currentB[2]);
+            // วาดตัวหนังสือระบุแกน X, Y, Z
+            ctx.font = 'bold 16px Outfit';
+            ctx.fillStyle = 'rgba(239, 68, 68, 1)';
+            ctx.fillText('X', xAxis.x + 5, xAxis.y + 5);
+            ctx.fillStyle = 'rgba(34, 197, 94, 1)';
+            ctx.fillText('Y', yAxis.x - 5, yAxis.y - 10);
+            ctx.fillStyle = 'rgba(59, 130, 246, 1)';
+            ctx.fillText('Z', zAxis.x - 15, zAxis.y - 5);
 
-            // วาดลูกศรเวกเตอร์ A ด้วยสีฟ้า
-            drawArrow(origin, pA, '#0ea5e9', 3);
-            // วาดลูกศรเวกเตอร์ B ด้วยสีม่วง
-            drawArrow(origin, pB, '#8b5cf6', 3);
+            // แปลงพิกัด 3 มิติของเวกเตอร์ A และ B ให้อยู่บนผืนผ้า 2 มิติ โดยใช้สเกลใหม่
+            const pA = project(currentA[0], currentA[1], currentA[2], scale);
+            const pB = project(currentB[0], currentB[1], currentB[2], scale);
 
-            // ส่วนของการวาดแอนิเมชันจุดเคลื่อนที่ตามเวกเตอร์ A
+            // วาดลูกศรเวกเตอร์ A ด้วยสีฟ้าสว่าง
+            drawArrow(origin, pA, '#38bdf8', 3);
+            // วาดลูกศรเวกเตอร์ B ด้วยสีม่วงสว่าง
+            drawArrow(origin, pB, '#c084fc', 3);
+
+            // ส่วนของการวาดแอนิเมชันจุดเคลื่อนที่ตามเวกเตอร์ A และ B
             if (isSimulating) {
-                // คำนวณตำแหน่งจุดตามความคืบหน้า (simProgress จาก 0 ไป 1)
-                const sx = currentA[0] * simProgress;
-                const sy = currentA[1] * simProgress;
-                const sz = currentA[2] * simProgress;
-                // แปลงตำแหน่ง 3 มิติของจุดเป็น 2 มิติ
-                const pS = project(sx, sy, sz);
+                // เวกเตอร์ A (สีเหลือง)
+                const sxA = currentA[0] * simProgress;
+                const syA = currentA[1] * simProgress;
+                const szA = currentA[2] * simProgress;
+                const pSA = project(sxA, syA, szA, scale);
 
-                // เริ่มวาดจุด (วงกลม)
                 ctx.beginPath();
-                // กำหนดวงกลม รัศมี 6
-                ctx.arc(pS.x, pS.y, 6, 0, Math.PI * 2);
-                // กำหนดสีของวงกลม (สีส้ม/ทอง)
-                ctx.fillStyle = '#f59e0b';
-                // ระบายสี
+                ctx.arc(pSA.x, pSA.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#fde047';
                 ctx.fill();
-                // เพิ่มเงาเรืองแสงให้จุด
                 ctx.shadowBlur = 15;
-                ctx.shadowColor = '#f59e0b';
-                // วาดเส้นขอบวงกลม
+                ctx.shadowColor = '#fde047';
                 ctx.stroke();
+
+                // เวกเตอร์ B (สีชมพู/ม่วงอ่อน)
+                const sxB = currentB[0] * simProgress;
+                const syB = currentB[1] * simProgress;
+                const szB = currentB[2] * simProgress;
+                const pSB = project(sxB, syB, szB, scale);
+
+                ctx.beginPath();
+                ctx.arc(pSB.x, pSB.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#f472b6';
+                ctx.fill();
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#f472b6';
+                ctx.stroke();
+
                 // ยกเลิกการแสดงเงา
                 ctx.shadowBlur = 0;
             }
@@ -794,24 +878,58 @@
             // คำนวณขนาด (ความยาว) ของเวกเตอร์ B
             const magB = Math.sqrt(b3[0] ** 2 + b3[1] ** 2 + b3[2] ** 2);
 
+            // แสดงวิธีคิดขนาดเวกเตอร์
+            document.getElementById('calcMagA').textContent = `√(${a3[0]}² + ${a3[1]}² + ${a3[2]}²)`;
+            document.getElementById('calcMagB').textContent = `√(${b3[0]}² + ${b3[1]}² + ${b3[2]}²)`;
+
             // แสดงผลขนาดเวกเตอร์โดยปัดทศนิยม 2 ตำแหน่ง
             outMagA.textContent = magA.toFixed(2);
             outMagB.textContent = magB.toFixed(2);
 
             // คำนวณ Dot Product (x1*x2 + y1*y2 + z1*z2)
             const dot = a3[0] * b3[0] + a3[1] * b3[1] + a3[2] * b3[2];
+            // แสดงวิธีคิด Dot Product
+            document.getElementById('calcDot').textContent = `(${a3[0]}×${b3[0]}) + (${a3[1]}×${b3[1]}) + (${a3[2]}×${b3[2]})`;
             // แสดงผลลัพธ์ Dot Product
             outDot.textContent = dot.toFixed(2);
 
             // ตรวจสอบความตั้งฉาก (หาก Dot Product เป็น 0 หมายถึงเวกเตอร์ตั้งฉากกัน) ใช้ < 0.0001 เพื่อหลีกเลี่ยง error ทศนิยม
+            const perpReason = document.getElementById('perpReason');
             if (Math.abs(dot) < 0.0001 && magA > 0 && magB > 0) {
                 // อัปเดตข้อความและคลาสกรณีตั้งฉาก
                 outPerp.textContent = "ตั้งฉาก (YES)";
                 outPerp.className = "badge badge-success";
+                perpReason.innerHTML = `
+                    <span style="color: var(--accent-success); font-weight: 600;">✓ ตั้งฉากกันเพราะ Dot Product เท่ากับ 0</span><br>
+                    <span style="font-size: 0.8rem;">หมายความว่ามุมระหว่างเวกเตอร์ทั้งสองคือ 90 องศาพอดี</span>
+                `;
             } else {
                 // อัปเดตข้อความและคลาสกรณีไม่ตั้งฉาก
                 outPerp.textContent = "ไม่ตั้งฉาก (NO)";
                 outPerp.className = "badge badge-error";
+
+                // คำนวณหาวิธีทำให้ตั้งฉาก (แก้ค่าเวกเตอร์ A ให้ Dot Product = 0)
+                let suggestion = "";
+                if (magB === 0) {
+                    suggestion = "เวกเตอร์ B เป็นเวกเตอร์ศูนย์ ไม่สามารถทำให้ตั้งฉากได้";
+                } else if (Math.abs(b3[2]) > 0.0001) {
+                    const newZ = -(a3[0] * b3[0] + a3[1] * b3[1]) / b3[2];
+                    suggestion = `เปลี่ยน <b>Z ของ A</b> เป็น <span class="value-highlight">${newZ.toFixed(2)}</span>`;
+                } else if (Math.abs(b3[1]) > 0.0001) {
+                    const newY = -(a3[0] * b3[0] + a3[2] * b3[2]) / b3[1];
+                    suggestion = `เปลี่ยน <b>Y ของ A</b> เป็น <span class="value-highlight">${newY.toFixed(2)}</span>`;
+                } else if (Math.abs(b3[0]) > 0.0001) {
+                    const newX = -(a3[1] * b3[1] + a3[2] * b3[2]) / b3[0];
+                    suggestion = `เปลี่ยน <b>X ของ A</b> เป็น <span class="value-highlight">${newX.toFixed(2)}</span>`;
+                }
+
+                perpReason.innerHTML = `
+                    <span style="color: var(--accent-error); font-weight: 600;">✗ ไม่ตั้งฉากเพราะ Dot Product ไม่เท่ากับ 0 (${dot.toFixed(2)})</span><br>
+                    <div style="margin-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px;">
+                        <span style="font-size: 0.8rem; color: #fff;">💡 วิธีทำให้ตั้งฉาก (ทำให้ Dot = 0):</span><br>
+                        ${suggestion}
+                    </div>
+                `;
             }
 
             // คำนวณ Cross Product (ได้ผลลัพธ์เป็นเวกเตอร์ใหม่ที่ตั้งฉากกับทั้งสองเวกเตอร์)
@@ -820,13 +938,26 @@
                 a3[2] * b3[0] - a3[0] * b3[2], // y
                 a3[0] * b3[1] - a3[1] * b3[0]  // z
             ];
+            // แสดงวิธีคิด Cross Product ชัดเจนทุกแกน (X, Y, Z)
+            document.getElementById('calcCross').innerHTML = `
+                <div style="margin-bottom: 2px;">X: (${a3[1]}×${b3[2]}) - (${a3[2]}×${b3[1]}) = ${cross[0]}</div>
+                <div style="margin-bottom: 2px;">Y: (${a3[2]}×${b3[0]}) - (${a3[0]}×${b3[2]}) = ${cross[1]}</div>
+                <div>Z: (${a3[0]}×${b3[1]}) - (${a3[1]}×${b3[0]}) = ${cross[2]}</div>
+            `;
             // แสดงผลลัพธ์ Cross Product แบบเวกเตอร์ (x, y, z)
             outCross.textContent = `(${cross[0]}, ${cross[1]}, ${cross[2]})`;
+
+            // ตรวจสอบและแสดงป้ายว่าเป็น 2 มิติ หรือ 3 มิติ
+            const is2D = (a3[2] === 0 && b3[2] === 0);
+            document.querySelector('.canvas-label').innerHTML = is2D ? '<b style="color: var(--accent-primary);">โหมด 2 มิติ</b>' : '<b style="color: var(--accent-secondary);">โหมด 3 มิติ Isometric</b>';
 
             // คำนวณมุมระหว่างเวกเตอร์
             if (magA > 0 && magB > 0) {
                 // หาค่า cos(theta)
                 let cosTheta = dot / (magA * magB);
+                // แสดงวิธีคิดมุม
+                document.getElementById('calcAngle').textContent = `cos⁻¹(${dot.toFixed(2)} / (${magA.toFixed(2)} × ${magB.toFixed(2)}))`;
+
                 // จำกัดค่า cosTheta ให้อยู่ในช่วง [-1, 1] (Clamping)
                 // เพื่อป้องกันปัญหาจาก Floating Point Error (เช่น 1.0000000000000002) 
                 // ซึ่งจะทำให้ Math.acos() คืนค่าเป็น NaN
@@ -838,6 +969,7 @@
                 outAngle.textContent = angleDeg.toFixed(1) + "°";
             } else {
                 // ถ้ามีเวกเตอร์ใดเวกเตอร์หนึ่งมีขนาดเป็น 0 มุมจะเป็น 0 องศา
+                document.getElementById('calcAngle').textContent = "-";
                 outAngle.textContent = "0.0°";
             }
 
