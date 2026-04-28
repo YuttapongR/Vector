@@ -12,34 +12,30 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-base: #f8fafc;
+            --bg-base: #f4f7fa;
+            /* สีพื้นหลังเว็บสว่างสบายตา */
             --bg-gradient-1: #e0e7ff;
-            --bg-gradient-2: #f1f5f9;
+            --bg-gradient-2: #f8fafc;
             --card-bg: #ffffff;
-            --card-border: rgba(0, 0, 0, 0.08);
-            --accent-primary: #3b82f6;
-            --accent-primary-glow: rgba(59, 130, 246, 0.4);
-            --accent-secondary: #8b5cf6;
-            --accent-secondary-glow: rgba(139, 92, 246, 0.4);
-            --accent-success: #10b981;
-            --accent-error: #ef4444;
-            --text-main: #1e293b;
-            --text-dim: #01285f;
+            --card-border: #e2e8f0;
+            --accent-primary: #2563eb;
+            --accent-primary-glow: rgba(37, 99, 235, 0.15);
+            --accent-secondary: #7c3aed;
+            --accent-secondary-glow: rgba(124, 58, 237, 0.15);
+            --accent-success: #059669;
+            --accent-error: #dc2626;
+            --text-main: #0f172a;
+            /* สีตัวอักษรเข้มขึ้นเล็กน้อยเพื่อความชัดเจน */
+            --text-dim: #475569;
             --highlight: #f59e0b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
             font-family: 'Outfit', 'Prompt', sans-serif;
             background-color: var(--bg-base);
             background-image:
-                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 40%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 40%);
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.05), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.05), transparent 40%);
             background-attachment: fixed;
             color: var(--text-main);
             line-height: 1.6;
@@ -47,6 +43,7 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
+
 
         /* Animated background elements */
         .bg-orb {
@@ -132,7 +129,7 @@
         .main-title {
             font-size: 3.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #fff, #94a3b8);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
@@ -179,7 +176,7 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #fff;
+            color: var(--text-main);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -197,20 +194,22 @@
         }
 
         .algo-item {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #ffffff;
+            border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 16px 20px;
             display: flex;
             flex-direction: column;
             gap: 8px;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .algo-item:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(255, 255, 255, 0.1);
+            background: #f8fafc;
+            border-color: #cbd5e1;
             transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .algo-label {
@@ -379,14 +378,16 @@
             position: absolute;
             bottom: 16px;
             right: 16px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(4px);
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 0.75rem;
-            color: var(--text-dim);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border: 1px solid #e2e8f0;
             pointer-events: none;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .badge {
@@ -460,10 +461,10 @@
         }
 
         .btn-random {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--accent-primary);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 6px 12px;
+            border: none;
+            padding: 8px 16px;
             border-radius: 8px;
             font-size: 0.85rem;
             cursor: pointer;
@@ -472,12 +473,13 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            font-weight: 600;
         }
 
         .btn-random:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: #1d4ed8;
             transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
 
         .btn-random:active {
@@ -598,7 +600,7 @@
                             <span id="outPerp" class="badge badge-error">ไม่ตั้งฉาก (NO)</span>
                         </div>
                         <div id="perpReason"
-                            style="font-size: 0.85rem; color: var(--text-dim); background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; width: 100%; border: 1px solid rgba(255,255,255,0.05); line-height: 1.5;">
+                            style="font-size: 0.85rem; color: var(--text-dim); background: #f8fafc; padding: 12px; border-radius: 8px; width: 100%; border: 1px solid #e2e8f0; line-height: 1.5;">
                             <!-- เหตุผลและวิธีแก้จะถูกแทรกที่นี่ -->
                         </div>
                     </div>
@@ -769,7 +771,7 @@
                 ctx.beginPath();
                 ctx.moveTo(startX.x, startX.y);
                 ctx.lineTo(endX.x, endX.y);
-                ctx.strokeStyle = i === 0 ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.08)';
+                ctx.strokeStyle = i === 0 ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.1)';
                 ctx.stroke();
 
                 // เส้นขนานกับแกน Y
@@ -778,7 +780,7 @@
                 ctx.beginPath();
                 ctx.moveTo(startY.x, startY.y);
                 ctx.lineTo(endY.x, endY.y);
-                ctx.strokeStyle = i === 0 ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.08)';
+                ctx.strokeStyle = i === 0 ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.1)';
                 ctx.stroke();
             }
 
@@ -820,10 +822,10 @@
             const pA = project(currentA[0], currentA[1], currentA[2], scale);
             const pB = project(currentB[0], currentB[1], currentB[2], scale);
 
-            // วาดลูกศรเวกเตอร์ A ด้วยสีฟ้าสว่าง
-            drawArrow(origin, pA, '#38bdf8', 3);
-            // วาดลูกศรเวกเตอร์ B ด้วยสีม่วงสว่าง
-            drawArrow(origin, pB, '#c084fc', 3);
+            // วาดลูกศรเวกเตอร์ A ด้วยสีฟ้าที่ชัดเจน
+            drawArrow(origin, pA, '#2563eb', 3);
+            // วาดลูกศรเวกเตอร์ B ด้วยสีม่วงที่ชัดเจน
+            drawArrow(origin, pB, '#7c3aed', 3);
 
             // ส่วนของการวาดแอนิเมชันจุดเคลื่อนที่ตามเวกเตอร์ A และ B
             if (isSimulating) {
@@ -925,8 +927,8 @@
 
                 perpReason.innerHTML = `
                     <span style="color: var(--accent-error); font-weight: 600;">✗ ไม่ตั้งฉากเพราะ Dot Product ไม่เท่ากับ 0 (${dot.toFixed(2)})</span><br>
-                    <div style="margin-top: 6px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px;">
-                        <span style="font-size: 0.8rem; color: #fff;">💡 วิธีทำให้ตั้งฉาก (ทำให้ Dot = 0):</span><br>
+                    <div style="margin-top: 6px; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
+                        <span style="font-size: 0.8rem; color: var(--text-main);">💡 วิธีทำให้ตั้งฉาก (ทำให้ Dot = 0):</span><br>
                         ${suggestion}
                     </div>
                 `;
